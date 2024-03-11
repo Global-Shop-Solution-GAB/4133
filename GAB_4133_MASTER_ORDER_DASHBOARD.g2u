@@ -1,0 +1,779 @@
+Program.Sub.ScreenSU.Start
+Gui.F_Order..Create
+Gui.F_Order..Size(20355,10290)
+Gui.F_Order..MinX(0)
+Gui.F_Order..MinY(0)
+Gui.F_Order..Position(0,0)
+Gui.F_Order..BackColor(-2147483633)
+Gui.F_Order..MousePointer(0)
+Gui.F_Order..Event(UnLoad,CloseScreen)
+Gui.F_Order..Caption("Master Dashboard")
+Gui.F_Order..Event(Resize,Resize)
+Gui.F_Order.GsGCOrder.Create(GsGridControl)
+Gui.F_Order.GsGCOrder.Size(19830,7995)
+Gui.F_Order.GsGCOrder.Position(165,1590)
+Gui.F_Order.GsGCOrder.Event(RowCellClick,RowCellClick)
+Gui.F_Order.GsGCOrder.Event(CellValueChanged,CellValueChanged)
+Gui.F_Order.frameMode.Create(Frame)
+Gui.F_Order.frameMode.Size(1755,1350)
+Gui.F_Order.frameMode.Position(18210,75)
+Gui.F_Order.frameMode.Caption("Mode")
+Gui.F_Order.frameMode.FontSize(9)
+Gui.F_Order.optView.Create(Option)
+Gui.F_Order.optView.Size(1575,255)
+Gui.F_Order.optView.Position(120,255)
+Gui.F_Order.optView.Parent("frameMode")
+Gui.F_Order.optView.Caption("View")
+Gui.F_Order.optView.FontSize(9)
+Gui.F_Order.optView.Event(Click,ModeSelect)
+Gui.F_Order.optEdit.Create(Option)
+Gui.F_Order.optEdit.Size(1575,255)
+Gui.F_Order.optEdit.Position(120,600)
+Gui.F_Order.optEdit.Parent("frameMode")
+Gui.F_Order.optEdit.Caption("Edit")
+Gui.F_Order.optEdit.FontSize(9)
+Gui.F_Order.optEdit.Event(Click,ModeSelect)
+Gui.F_Order.optShip.Create(Option)
+Gui.F_Order.optShip.Size(1575,255)
+Gui.F_Order.optShip.Position(120,945)
+Gui.F_Order.optShip.Parent("frameMode")
+Gui.F_Order.optShip.Caption("Ship")
+Gui.F_Order.optShip.FontSize(9)
+Gui.F_Order.optShip.Event(Click,ModeSelect)
+Gui.F_Order.picGSSLogo.Create(PictureBox)
+Gui.F_Order.picGSSLogo.Size(4005,960)
+Gui.F_Order.picGSSLogo.Position(7740,255)
+Gui.F_Order.lbl1.Create(Label,"Total Open Sales Amount",True,2190,255,0,15780,120,True,1,"Arial",9,-2147483633,0)
+Gui.F_Order.txt1.Create(TextBox,"",True,2100,315,0,15855,330,False,1,"Arial",9,-2147483643,1)
+Gui.F_Order.cmdRefresh.Create(Button)
+Gui.F_Order.cmdRefresh.Size(1155,645)
+Gui.F_Order.cmdRefresh.Position(120,300)
+Gui.F_Order.cmdRefresh.Caption("REFRESH")
+Gui.F_Order.cmdRefresh.FontSize(9)
+Gui.F_Order.cmdRefresh.Event(Click,RefreshScreen)
+Gui.F_Order.cmdSortOrder.Create(Button)
+Gui.F_Order.cmdSortOrder.Size(1155,645)
+Gui.F_Order.cmdSortOrder.Position(1500,300)
+Gui.F_Order.cmdSortOrder.Caption("Sort by Order No.")
+Gui.F_Order.cmdSortOrder.FontSize(9)
+Gui.F_Order.cmdSortOrder.Event(Click,SortByOrder)
+Gui.F_Order.cmdExport.Create(Button)
+Gui.F_Order.cmdExport.Size(1155,645)
+Gui.F_Order.cmdExport.Position(2895,300)
+Gui.F_Order.cmdExport.Caption("Export")
+Gui.F_Order.cmdExport.FontSize(9)
+Gui.F_Order.cmdExport.Event(Click,ExportGrid)
+Gui.F_Order.lblSOShip.Create(Label,"Sales Order to Ship",False,1935,255,0,15855,855,True,0,"Arial",9,-2147483633,0)
+Gui.F_Order.txtSOShip.Create(TextBox,"",False,1680,315,0,15855,1080,True,0,"Arial",9,-2147483643,1)
+Gui.F_Order.txtSOShip.Event(LostFocus,txtSOShip_Entered)
+Gui.F_WO..Create
+Gui.F_WO..Caption("Select a Job & Suffix")
+Gui.F_WO..Size(5550,4155)
+Gui.F_WO..MinX(0)
+Gui.F_WO..MinY(0)
+Gui.F_WO..Position(0,0)
+Gui.F_WO..BackColor(-2147483633)
+Gui.F_WO..MousePointer(0)
+Gui.F_WO..Event(UnLoad,CloseF_WO)
+Gui.F_WO.GsGCJob.Create(GsGridControl)
+Gui.F_WO.GsGCJob.Size(5115,3405)
+Gui.F_WO.GsGCJob.Position(105,75)
+Gui.F_WO.GsGCJob.Event(RowClick,RowClickF_WO)
+Program.Sub.ScreenSU.End
+
+Program.Sub.Preflight.Start
+V.Global.iGridDX.Declare
+V.Global.iGridDY.Declare
+V.Global.iF_OrderHeight.Declare
+V.Global.iF_OrderWidth.Declare
+V.Global.iRefDX.Declare
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+V.Local.iX.Declare
+V.Local.sGssLogo.Declare
+V.Local.sIcon.Declare
+V.Local.sTemp.Declare
+
+F.Intrinsic.String.Build("{0}\GAB\GAS\gss2.ico",V.Caller.PluginsDir,v.Local.sIcon)
+F.Intrinsic.String.Build("{0}\GAB\GAS\GAB_GSS_Logo_Green_Dash.png",V.Caller.PluginsDir,V.Local.sGssLogo)
+Gui.F_Order.picGSSLogo.Picture(V.Local.sGssLogo)
+F.Intrinsic.Math.Sub(V.Screen.F_Order.Width,V.Screen.F_Order!picGSSLogo.Width,V.Local.iX)
+F.Intrinsic.Math.Div(V.Local.iX,2,V.Local.iX)
+Gui.F_Order.picGSSLogo.CurrentX(V.Local.iX)
+Gui.F_Order..Icon(V.Local.sIcon)
+
+F.ODBC.Connection!conx.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+
+F.Intrinsic.UI.InvokeWaitDialog("Preparing datatables","Apex Master Dashboard [4133]")
+F.Intrinsic.Control.CallSub(loaddatatables)
+F.Intrinsic.Control.CallSub(generatedashboarddata)
+F.Data.DataView.Create("dtDash","dvDash",22,"","Ship_Date ASC, Order ASC, Line ASC")
+Gui.F_Order.GsGCOrder.AddGridViewFromDataview("gvDash","dtDash","dvDash")
+Gui.F_Order.GsGCOrder.MainView("gvDash")
+F.Intrinsic.Control.CallSub(setgridproperties)
+F.Intrinsic.Control.CallSub(setgridcolor)
+
+Gui.F_Order.optEdit.Value(False)
+Gui.F_Order.optEdit.Enabled(False)
+Gui.F_Order.optView.Value(True)
+Gui.F_Order.optShip.Value(False)
+Gui.F_Order.optShip.Enabled(False)
+F.Intrinsic.Control.CallSub(checkgroup)
+F.Intrinsic.Control.CallSub(modeselect)
+
+'Get the initial width and height of screen elements
+V.Global.iF_OrderHeight.Set(V.Screen.F_Order.Height)
+V.Global.iF_OrderWidth.Set(V.Screen.F_Order.Width)
+F.Intrinsic.Math.Sub(V.Screen.F_Order.Width,V.Screen.F_Order!GsGCOrder.Left,V.Screen.F_Order!GsGCOrder.Width,V.Global.iGridDX)
+F.Intrinsic.Math.Sub(V.Screen.F_Order.Height,V.Screen.F_Order!GsGCOrder.Top,V.Screen.F_Order!GsGCOrder.Height,V.Global.iGridDY)
+F.Intrinsic.Math.Sub(V.Screen.F_Order!lbl1.Left,V.Screen.F_Order!picGSSLogo.Left,V.Screen.F_Order!picGSSLogo.Width,V.Global.iRefDX)
+
+F.Intrinsic.UI.CloseWaitDialog
+Gui.F_Order..Show
+Program.Sub.Main.End
+
+Program.Sub.LoadDatatables.Start
+V.Local.bExist.Declare
+F.Intrinsic.Variable.ArgExists("iRefresh",V.Local.bExist)
+F.Intrinsic.Control.If(V.Local.bExist,=,True)
+	F.Data.DataTable.Close("dtSOLine")
+	F.Data.DataTable.Close("dtSOShip")
+	F.Data.DataTable.Close("dtDropPO")
+'	F.Data.DataTable.Close("dtCust")
+	F.Data.DataTable.Close("dtSOWO")
+	F.Data.DataTable.Close("dtSP")
+F.Intrinsic.Control.EndIf
+F.Data.DataTable.CreateFromSQL("dtSOLine","conx","select SO1.order_no, SO1.record_no, SO1.line_type, SO1.customer, SO1.qty_bo, part, SO1.description, SO1.item_promise_dt, (SO1.qty_bo * SO1.discount_price) as extension, SO1.user_5 as user_5, SO2.salesperson as SP, SO2.terms as terms, SO2.ship_via as ship_via, SO2.date_order as date_order, SO3.name_customer as name_customer from v_order_lines SO1 left join (v_order_header SO2 left join v_order_bill_to SO3 on SO2.order_no = SO3.order_no) on SO1.order_no = SO2.order_no order by SO1.item_promise_dt",True)
+F.Data.DataTable.CreateFromSQL("dtSOShip","conx","select order_no, order_ship_id as shipID, name_customer_ship as customer from v_order_ship_to where order_ship_id <> '' ",True)
+'F.Data.DataTable.CreateFromSQL("dtSOHead","conx","select order_no, salesperson, terms, ship_via, date_order from v_order_header",True)
+F.Data.DataTable.CreateFromSQL("dtDropPO","conx","SELECT po, order_no, order_line FROM PO_DROP_SHIP",True)
+'F.Data.DataTable.CreateFromSQL("dtCust","conx","select customer, name_customer as 'name' from v_customer_master",True)
+F.Data.DataTable.CreateFromSQL("dtSOWO","conx","SELECT job, suffix, order_no, order_line FROM V_ORDER_TO_WO",True)
+F.Data.DataTable.CreateFromSQL("dtSP","conx","SELECT id, name FROM salespersons",True)
+'Datatable for GS Gridcontrol
+F.Intrinsic.Control.If(V.DataTable.dtDash.Exists,=,False)
+	F.Data.DataTable.Create("dtDash",True)
+	F.Data.DataTable.AddColumn("dtDash","Order","String")
+	F.Data.DataTable.AddColumn("dtDash","Line","String")
+	F.Data.DataTable.AddColumn("dtDash","Order_Date","Date")
+	F.Data.DataTable.AddColumn("dtDash","Customer","String")
+	F.Data.DataTable.AddColumn("dtDash","Part","String")
+	F.Data.DataTable.AddColumn("dtDash","Description","String")
+	F.Data.DataTable.AddColumn("dtDash","Job","String")
+	F.Data.DataTable.AddColumn("dtDash","Suffix","String")
+	F.Data.DataTable.AddColumn("dtDash","Ship_Date","Date")
+	F.Data.DataTable.AddColumn("dtDash","Qty_Order","Long")
+	F.Data.DataTable.AddColumn("dtDash","Qty_Alloc","Long")
+	F.Data.DataTable.AddColumn("dtDash","Qty_Avail","Long")
+	F.Data.DataTable.AddColumn("dtDash","Extension","Float")
+	F.Data.DataTable.AddColumn("dtDash","Notes","String")
+	F.Data.DataTable.AddColumn("dtDash","User5","String")
+	F.Data.DataTable.AddColumn("dtDash","SP","String")
+	F.Data.DataTable.AddColumn("dtDash","Ship_Via","String")
+	F.Data.DataTable.AddColumn("dtDash","Terms","String")
+	F.Data.DataTable.AddColumn("dtDash","PO","String")
+	F.Data.DataTable.AddColumn("dtDash","Picklist","Long")
+F.Intrinsic.Control.EndIf
+Program.Sub.LoadDatatables.End
+
+Program.Sub.GenerateDashboardData.Start
+V.Local.fQtyAlloc.Declare
+V.Local.fQtyAvail.Declare
+
+V.Local.i1.Declare
+V.Local.iCRow.Declare
+
+V.Local.sCustomer.Declare
+V.Local.sFilter.Declare
+V.Local.sJob.Declare
+V.Local.sLine.Declare
+V.Local.sMessage.Declare
+V.Local.sNote.Declare
+V.Local.sPO.Declare
+V.Local.sRet.Declare
+V.Local.sRet2.Declare
+V.Local.sSP.Declare
+V.Local.sSQL.Declare
+V.Local.sSuffix.Declare
+
+'Loop through order line data
+F.Intrinsic.Control.For(V.Local.i1,0,V.DataTable.dtSOLine.RowCount--,1)
+	F.Intrinsic.Math.Add(V.Local.i1,1,V.Local.iCRow)
+	F.Intrinsic.String.Build("Order Entry Data, reading record {0} of {1}",V.Local.iCRow,V.DataTable.dtSOLine.RowCount,V.Local.sMessage)
+	F.Intrinsic.UI.ChangeWaitStatus(V.Local.sMessage,V.Local.iCRow,1,V.DataTable.dtSOLine.RowCount)
+'	'Get customer name
+'	F.Intrinsic.String.Build("customer = '{0}'",V.DataTable.dtSOLine(V.Local.i1).customer!FieldValTrim,V.Local.sFilter)
+'	F.Data.DataTable.Select("dtCust",V.Local.sFilter,V.Local.sRet)
+'	V.Local.sCustomer.Set(V.DataTable.dtCust(V.Local.sRet).name!FieldValTrim)
+	'Work Order
+	F.Intrinsic.String.Build("order_no = '{0}' AND order_line = '{1}'",V.DataTable.dtSOLine(V.Local.i1).order_no!FieldValTrim,V.DataTable.dtSOLine(V.Local.i1).record_no!FieldValTrim,V.Local.sFilter)
+	F.Data.DataTable.Select("dtSOWO",V.Local.sFilter,V.Local.sRet)
+	F.Intrinsic.Control.If(V.Local.sRet,<>,"***NORETURN***")
+		F.Intrinsic.String.Split(V.Local.sRet,"*!*",V.Local.sRet)
+		F.Intrinsic.Control.If(V.Local.sRet.UBound,=,0)
+			V.Local.sJob.Set(V.DataTable.dtSOWO(V.Local.sRet).job!FieldValTrim)
+			V.Local.sSuffix.Set(V.DataTable.dtSOWO(V.Local.sRet).suffix!FieldValTrim)
+		F.Intrinsic.Control.Else
+			V.Local.sJob.Set("MULTI")
+			V.Local.sSuffix.Set("")
+		F.Intrinsic.Control.EndIf
+	F.Intrinsic.Control.Else
+		V.Local.sJob.Set("")
+		V.Local.sSuffix.Set("") 
+	F.Intrinsic.Control.EndIf
+	'Allocated quantity
+	F.Intrinsic.String.Left(V.DataTable.dtSOLine(V.Local.i1).record_no!FieldValTrim,3,V.Local.sLine)
+	F.Intrinsic.String.Build("SELECT QUANTITY FROM ITEM_MASTER WHERE PART = '{0}' AND HEAT LIKE '{1}-{2}%' AND QUANTITY > 0",V.DataTable.dtSOLine(V.Local.i1).part!FieldValTrim,V.DataTable.dtSOLine(V.Local.i1).order_no!FieldValTrim,V.Local.sLine.Trim,V.Local.sSQL)
+	F.Data.DataTable.CreateFromSQL("dtItem","conx",V.Local.sSQL)
+	F.Data.DataTable.Compute("dtItem","SUM(QUANTITY)","",V.Local.fQtyAlloc)
+	F.Data.DataTable.Close("dtItem")
+	'Available quantity
+	F.Intrinsic.String.Build("SELECT QTY_ONHAND, QTY_REQUIRED FROM INVENTORY_MSTR WHERE PART = '{0}'",V.DataTable.dtSOLine(V.Local.i1).part!FieldValTrim,V.Local.sSQL)
+	F.ODBC.Connection!Conx.OpenLocalRecordsetRO("rst",V.Local.sSQL)
+	F.Intrinsic.Control.If(V.ODBC.Conx!rst.EOF,=,True)
+		V.Local.fQtyAvail.Set(0)
+	F.Intrinsic.Control.Else
+		F.Intrinsic.Math.Sub(V.ODBC.Conx!rst.FieldValFloat!QTY_ONHAND,V.ODBC.Conx!rst.FieldValFloat!QTY_REQUIRED,V.Local.fQtyAvail)
+		F.Intrinsic.Control.If(V.Local.fQtyAvail,>=,0)
+			
+		F.Intrinsic.Control.Else
+			V.Local.fQtyAvail.Set(0)
+		F.Intrinsic.Control.EndIf
+	F.Intrinsic.Control.EndIf
+	F.ODBC.conx!rst.Close
+	'Drop PO
+	F.Intrinsic.Control.If(V.DataTable.dtSOLine(V.Local.i1).line_type!FieldValTrim,=,"D")
+		F.Intrinsic.String.Build("order_no = '{0}' and order_line = '{1}'",V.DataTable.dtSOLine(V.Local.i1).order_no!FieldValTrim,V.DataTable.dtSOLine(V.Local.i1).record_no!FieldValTrim,V.Local.sFilter)
+		F.Data.DataTable.Select("dtDropPO",V.Local.sFilter,V.Local.sRet)
+		F.Intrinsic.Control.If(V.Local.sRet,=,"***NORETURN***")
+			V.Local.sPO.Set("N")
+		F.Intrinsic.Control.Else
+			V.Local.sPO.Set(V.DataTable.dtDropPO(V.Local.sRet).po!FieldValTrim)
+		F.Intrinsic.Control.EndIf
+	F.Intrinsic.Control.Else
+		V.Local.sPO.Set("")
+	F.Intrinsic.Control.EndIf
+'	'Order header data
+'	F.Intrinsic.String.Build("order_no = '{0}'",V.DataTable.dtSOLine(V.Local.i1).order_no!FieldValTrim,V.Local.sFilter)
+'	F.Data.DataTable.Select("dtSOHead",V.Local.sFilter,V.Local.sRet)
+	'Salesperson
+'	F.Intrinsic.String.Build("id = '{0}'",V.DataTable.dtSOHead(V.Local.sRet).salesperson!FieldValTrim,V.Local.sFilter)
+	'Customer name from order ship to
+	F.Intrinsic.String.Build("order_no = '{0}'",V.DataTable.dtSOLine(V.Local.i1).order_no!FieldValTrim,V.Local.sFilter)
+	F.Data.DataTable.Select("dtSOShip",V.Local.sFilter,V.Local.sRet)
+	F.Intrinsic.Control.If(V.Local.sRet,=,"***NORETURN***")
+		V.Local.sCustomer.Set(V.DataTable.dtSOLine(V.Local.i1).name_customer!FieldValTrim)
+	F.Intrinsic.Control.Else
+		F.Intrinsic.String.Split(V.Local.sRet,"*!*",V.Local.sRet)
+		V.Local.sCustomer.Set(V.DataTable.dtSOShip(V.Local.sRet(0)).customer!FieldValTrim)
+	F.Intrinsic.Control.EndIf
+	F.Intrinsic.String.Build("id = '{0}'",V.DataTable.dtSOLine(V.Local.i1).SP!FieldValTrim,V.Local.sFilter)
+	F.Data.DataTable.Select("dtSP",V.Local.sFilter,V.Local.sRet2)
+	F.Intrinsic.Control.If(V.Local.sRet2,<>,"***NORETURN***")
+		V.Local.sSP.Set(V.DataTable.dtSP(V.Local.sRet2).name!FieldValTrim)
+	F.Intrinsic.Control.Else
+		V.Local.sSP.Set("")
+	F.Intrinsic.Control.EndIf
+	'Note
+	F.Intrinsic.String.Build("select comment from ina_oe_dash_comment where order_no = '{0}' and record_no = '{1}' and date_order = '{2}'",V.DataTable.dtSOLine(V.Local.i1).order_no!FieldValTrim,V.DataTable.dtSOLine(V.Local.i1).record_no!FieldValTrim,V.DataTable.dtSOLine(V.Local.i1).date_order!FieldValPervasiveDate,V.Local.sSQL)
+	F.ODBC.Connection!conx.OpenLocalRecordsetRO("rst",V.Local.sSQL)
+	F.Intrinsic.Control.If(V.ODBC.conx!rst.EOF,=,True)
+		V.Local.sNote.Set("")
+	F.Intrinsic.Control.Else
+		V.Local.sNote.Set(V.ODBC.conx!rst.FieldValTrim!comment)
+	F.Intrinsic.Control.EndIf
+	F.ODBC.conx!rst.Close
+	F.Data.DataTable.AddRow("dtDash","SP",V.Local.sSP.Trim,"Customer",V.Local.sCustomer.Trim,"Part",V.DataTable.dtSOLine(V.Local.i1).part!FieldValTrim,"Description",V.DataTable.dtSOLine(V.Local.i1).description!FieldValTrim,"Order",V.DataTable.dtSOLine(V.Local.i1).order_no!FieldValTrim,"Line",V.DataTable.dtSOLine(V.Local.i1).record_no!FieldValTrim,"Ship_Date",V.DataTable.dtSOLine(V.Local.i1).item_promise_dt!FieldValPervasiveDate,"Qty_Order",V.DataTable.dtSOLine(V.Local.i1).qty_bo!FieldValLong,"Qty_Alloc",V.Local.fQtyAlloc,"Qty_Avail",V.Local.fQtyAvail,"Extension",V.DataTable.dtSOLine(V.Local.i1).extension!FieldValFloat,"Notes",V.Local.sNote.Trim,"Ship_Via",V.DataTable.dtSOLine(V.Local.i1).ship_via!FieldValTrim,"Terms",V.DataTable.dtSOLine(V.Local.i1).terms!FieldValTrim,"PO",V.Local.sPO.Trim,"Job",V.Local.sJob.Trim,"Suffix",V.Local.sSuffix.Trim,"Order_Date",V.DataTable.dtSOLine(V.Local.i1).date_order!FieldVal,"User5",V.DataTable.dtSOLine(V.Local.i1).user_5!FieldValTrim)
+F.Intrinsic.Control.Next(V.Local.i1)
+
+F.Intrinsic.Control.CallSub(totalextension)
+
+F.Data.Dictionary.CreateFromDatatable("SO","dtDash","Order","Order")
+Gui.F_Order.txtSOShip.ClearAutoCompleteItems
+Gui.F_Order.txtSOShip.AddAutoCompleteItem("SO","Dictionary")
+F.Data.Dictionary.Close("SO")
+Program.Sub.GenerateDashboardData.End
+
+Program.Sub.CloseScreen.Start
+F.Data.DataTable.Close("dtSOLine")
+F.Data.DataTable.Close("dtSOShip")
+F.Data.DataTable.Close("dtDropPO")
+'F.Data.DataTable.Close("dtCust")
+F.Data.DataTable.Close("dtSOWO")
+F.Data.DataTable.Close("dtSP")
+F.Data.DataTable.Close("dtDash")
+F.ODBC.Connection!conx.Close
+F.Intrinsic.Control.End
+
+Program.Sub.CloseScreen.End
+
+Program.Sub.SetGridColor.Start
+V.Local.i1.Declare
+V.Local.iDay.Declare
+
+F.Intrinsic.Control.For(V.Local.i1,0,V.DataTable.dtSOLine.RowCount--,2)
+	Gui.F_Order.GsGCOrder.SetRowAppearance("gvDash",V.Local.i1,"backcolor","aliceblue")
+F.Intrinsic.Control.Next(V.Local.i1)
+Program.Sub.SetGridColor.End
+
+Program.Sub.SetGridProperties.Start
+'Gui.F_Order.GsGCOrder.AddColumn("gvDash","Picklist","String",True,True)
+Gui.F_Order.GsGCOrder.ColumnEdit("gvDash","Picklist","EditorButton","Print")
+
+Gui.F_Order.GsGCOrder.SetGridViewProperty("gvDash","MultiSelect",True)
+Gui.F_Order.GsGCOrder.SetGridViewProperty("gvDash","AllowSort",True)
+Gui.F_Order.GsGCOrder.SetGridViewProperty("gvDash","AllowFilter",True)
+Gui.F_Order.GsGCOrder.SetGridViewProperty("gvDash","OptionsDetailShowDetailTabs",False)
+Gui.F_Order.GsGCOrder.SetGridViewProperty("gvDash","OptionsViewShowGroupPanel",True)
+
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Order","CellFontUnderline",True)
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Order","CellForeColor",V.Color.Blue)
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Job","CellFontUnderline",True)
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Job","CellForeColor",V.Color.Blue)
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","PO","CellFontUnderline",True)
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","PO","CellForeColor",V.Color.Blue)
+
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Ship_Date","Caption","Ship Date")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Qty_Order","Caption","Order Qty")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Qty_Alloc","Caption","Alloc. Qty")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Qty_Avail","Caption","Avail. Qty")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Extension","Caption","Order Ext. Amount")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Ship_Via","Caption","Ship Via")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","PO","Caption","Drop PO")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","SP","Caption","Salesperson")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","User5","Caption","User Field 5")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Picklist","ShowCaption",False)
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Order_Date","Visible",False)
+
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Order","Fixed","Left")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Line","Fixed","Left")
+
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Order","AllowEdit",False)
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Job","AllowEdit",False)
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Notes","AllowEdit",True)
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Notes","ReadOnly",False)
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","User5","AllowEdit",True)
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","User5","ReadOnly",False)
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","PO","AllowEdit",False)
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Picklist","AllowEdit",False)
+
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Order","MinWidth","70")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Line","MinWidth","50")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Customer","MinWidth","320")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Part","MinWidth","150")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Description","MinWidth","320")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Job","MinWidth","70")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Suffix","MinWidth","60")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Ship_Date","MinWidth","100")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Qty_Order","MinWidth","120")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Qty_Alloc","MinWidth","120")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Qty_Avail","MinWidth","120")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Extension","MinWidth","130")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Notes","MinWidth","300")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","User5","MinWidth","300")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Ship_Via","MinWidth","100")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Terms","MinWidth","80")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","PO","MinWidth","80")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","SP","MinWidth","120")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Picklist","MinWidth","90")
+
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Order","HeaderHAlignment","Center")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Line","HeaderHAlignment","Center")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Customer","HeaderHAlignment","Center")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Part","HeaderHAlignment","Center")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Description","HeaderHAlignment","Center")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Job","HeaderHAlignment","Center")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Suffix","HeaderHAlignment","Center")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Ship_Date","HeaderHAlignment","Center")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Qty_Order","HeaderHAlignment","Center")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Qty_Alloc","HeaderHAlignment","Center")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Qty_Avail","HeaderHAlignment","Center")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Extension","HeaderHAlignment","Center")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Notes","HeaderHAlignment","Center")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","User5","HeaderHAlignment","Center")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Ship_Via","HeaderHAlignment","Center")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Terms","HeaderHAlignment","Center")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","PO","HeaderHAlignment","Center")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","SP","HeaderHAlignment","Center")
+
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Order","CellHAlignment","Center")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Line","CellHAlignment","Center")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Job","CellHAlignment","Center")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Suffix","CellHAlignment","Center")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Ship_Date","CellHAlignment","Center")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Ship_Via","CellHAlignment","Center")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Terms","CellHAlignment","Center")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","PO","CellHAlignment","Center")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","SP","CellHAlignment","Center")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Picklist","CellHAlignment","Center")
+
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Order","FixedWidth",False)
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Line","FixedWidth",False)
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Customer","FixedWidth",False)
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Part","FixedWidth",False)
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Description","FixedWidth",False)
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Job","FixedWidth",False)
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Suffix","FixedWidth",False)
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Ship_Date","FixedWidth",False)
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Qty_Order","FixedWidth",False)
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Qty_Alloc","FixedWidth",False)
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Qty_Avail","FixedWidth",False)
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Extension","FixedWidth",False)
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Notes","FixedWidth",False)
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Ship_Via","FixedWidth",False)
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Terms","FixedWidth",False)
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","PO","FixedWidth",False)
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","SP","FixedWidth",False)
+
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Ship_Date","DisplayCustomDatetime","d")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Qty_Order","DisplayCustomNumeric","##,###,##0.00")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Qty_Alloc","DisplayCustomNumeric","##,###,##0.00")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Qty_Avail","DisplayCustomNumeric","##,###,##0.00")
+Gui.F_Order.GsGCOrder.SetColumnProperty("gvDash","Extension","DisplayCustomNumeric","##,###,##0.00")
+Program.Sub.SetGridProperties.End
+
+Program.Sub.CheckGroup.Start
+V.Local.bCheck.Declare
+
+F.Global.Security.IsInGroup(V.Caller.User,"SHIP",V.Local.bCheck)
+F.Intrinsic.Control.If(V.Local.bCheck,=,True)
+	Gui.F_Order.optShip.Enabled(True)
+F.Intrinsic.Control.EndIf
+
+F.Global.Security.IsInGroup(V.Caller.User,"EDIT",V.Local.bCheck)
+F.Intrinsic.Control.If(V.Local.bCheck,=,True)
+	Gui.F_Order.optEdit.Enabled(True)
+F.Intrinsic.Control.EndIf
+Program.Sub.CheckGroup.End
+
+Program.Sub.TotalExtension.Start
+V.Local.fTotalExt.Declare
+V.Local.sTemp.Declare
+
+F.Data.DataTable.Compute("dtDash","SUM(Extension)","Part <> 'PROGRESS'",V.Local.fTotalExt)
+F.Intrinsic.String.Format(V.Local.fTotalExt,"#,0.00",V.Local.sTemp)
+Gui.F_Order.txt1.Text(V.Local.sTemp)
+Program.Sub.TotalExtension.End
+
+Program.Sub.RowCellClick.Start
+V.Local.i1.Declare
+V.Local.iAlign.Declare
+V.Local.iWidth.Declare
+
+V.Local.sBrowserList.Declare
+V.Local.sFilter.Declare
+V.Local.sFormat.Declare
+V.Local.sJob.Declare
+V.Local.sLine.Declare
+V.Local.sOrder.Declare
+V.Local.sParam.Declare
+V.Local.sRet.Declare
+V.Local.sSuffix.Declare
+V.Local.sTemp.Declare
+V.Local.sTitle.Declare
+
+'Open or view order
+F.Intrinsic.Control.If(V.Args.Column,=,"Order")
+	Gui.F_Order.GsGCOrder.GetCellValue("gvDash",0,V.Args.RowIndex,V.Local.sTemp)
+	f.Intrinsic.Control.If(v.Screen.F_Order!optEdit.Value,=,True)
+		F.Intrinsic.String.Concat(V.Local.stemp,"!*!O!*!*!*ZDR*!*",v.Local.stemp)
+		F.Global.General.CallWrapperSync(200000,v.Local.stemp)
+	f.Intrinsic.Control.ElseIf(v.Screen.F_Order!optShip.Value,=,True)
+		F.Global.General.CallWrapperSync(4010,v.Local.stemp)
+		Gui.F_Order.GsGCOrder.GetCellValue("gvDash",0,V.Args.RowIndex,V.Local.sTemp)
+		F.Intrinsic.Control.CallSub(checkshipment,"sSO",V.Local.sTemp.Trim)
+		F.Intrinsic.Control.If(V.DataTable.dtShipped.Exists,=,True)
+			F.Intrinsic.Control.CallSub(removeorder,"sSO",V.Local.sTemp.trim)
+		F.Intrinsic.Control.EndIf
+	f.Intrinsic.Control.Else
+		f.Intrinsic.String.Concat(v.Local.stemp,"!*!V!*!*!*ZDR*!*",v.Local.stemp)
+		f.Global.General.CallWrapperSync(200000,v.Local.stemp)
+	f.Intrinsic.Control.EndIf
+'Open or view Drop PO
+F.Intrinsic.Control.ElseIf(V.Args.Column,=,"PO")
+	Gui.F_Order.GsGCOrder.GetCellValue("gvDash",16,V.Args.RowIndex,V.Local.sTemp)
+	F.Intrinsic.Control.If(V.Local.sTemp.Trim,<>,"")
+	F.Intrinsic.Control.AndIf(V.Local.sTemp.Trim,<>,"N")
+		f.Intrinsic.Control.If(v.Screen.F_Order!optEdit.Value,=,True)
+			F.Intrinsic.String.Concat("O!*!",V.Local.sTemp,"!*!",V.Local.sTemp)
+			F.Global.General.CallWrapperASync(175200,V.Local.sTemp)
+		F.Intrinsic.Control.ElseIf(V.Screen.F_Order!optView.Value,=,True)
+			F.Intrinsic.String.Concat("V!*!",V.Local.sTemp,"!*!",V.Local.sTemp)
+			F.Global.General.CallWrapperASync(175200,V.Local.sTemp)
+		F.Intrinsic.Control.EndIf
+	F.Intrinsic.Control.EndIf
+'Print Picklist
+F.Intrinsic.Control.ElseIf(V.Args.Column,=,"Picklist")'
+	Gui.F_Order.GsGCOrder.GetCellValue("gvDash",0,V.Args.RowIndex,V.Local.sTemp)
+	F.Intrinsic.String.Split(V.Local.sTemp,"*!*",V.Local.sTemp)
+	F.Intrinsic.String.Concat(V.Local.sTemp,"!*!",V.Local.sTemp,"!*!","N","!*!","*!*ZDR*!*","!*!","*!*ZDR*!*","!*!","Y",V.Local.sParam)
+'	F.Intrinsic.String.Build("{0}!*!{0}!*!N!*!!*!!*!Y",V.Local.sTemp,V.Local.sParam)
+	F.Global.General.CallWrapperSync(910200,V.Local.sParam)
+'Open or view WO
+F.Intrinsic.Control.ElseIf(V.Args.Column,=,"Job")'
+	Gui.F_Order.GsGCOrder.GetCellValue("gvDash",5,V.Args.RowIndex,V.Local.sJob)
+	Gui.F_Order.GsGCOrder.GetCellValue("gvDash",6,V.Args.RowIndex,V.Local.sSuffix)
+	F.Intrinsic.Control.If(V.Local.sJob.Trim,<>,"MULTI")
+		f.Intrinsic.Control.If(v.Screen.F_Order!optEdit.Value,=,True)
+			F.Intrinsic.String.Build("{0}!*!{1}!*!O",V.Local.sJob.Trim,V.Local.sSuffix.Trim,V.Local.sParam)
+			F.Global.General.CallWrapperSync(2009,V.Local.sParam)
+		F.Intrinsic.Control.ElseIf(V.Screen.F_Order!optView.Value,=,True)
+			F.Intrinsic.String.Build("7!*!{0}!*!{1}!*!A",V.Local.sJob.Trim,V.Local.sSuffix.Trim,V.Local.sParam)
+			F.Global.General.CallWrapperSync(450000,V.Local.sParam)
+		F.Intrinsic.Control.EndIf
+	F.Intrinsic.Control.Else
+		Gui.F_Order.GsGCOrder.GetCellValue("gvDash",0,V.Args.RowIndex,V.Local.sOrder)
+		Gui.F_Order.GsGCOrder.GetCellValue("gvDash",1,V.Args.RowIndex,V.Local.sLine)
+		F.Intrinsic.String.Build("order_no = '{0}' and order_line = '{1}'",V.Local.sOrder.Trim,V.Local.sLine.Trim,V.Local.sFilter)
+		F.Data.DataView.Create("dtSOWO","dvJob",22,V.Local.sFilter,"job ASC, suffix ASC")
+		Gui.F_WO.GsGCJob.AddGridviewFromDataview("gvJob","dtSOWO","dvJob")
+		Gui.F_WO.GsGCJob.MainView("gvJob")
+		Gui.F_Order..Enabled(False)
+		Gui.F_WO.GsGCJob.SetColumnProperty("gvJob","job","Caption","Job")
+		Gui.F_WO.GsGCJob.SetColumnProperty("gvJob","suffix","Caption","Suffix")
+		Gui.F_WO.GsGCJob.SetColumnProperty("gvJob","job","AllowEdit",False)
+		Gui.F_WO.GsGCJob.SetColumnProperty("gvJob","suffix","AllowEdit",False)
+		Gui.F_WO.GsGCJob.SetColumnProperty("gvJob","order_no","Visible",False)
+		Gui.F_WO.GsGCJob.SetColumnProperty("gvJob","order_line","Visible",False)
+		Gui.F_WO..Show
+	F.Intrinsic.Control.EndIf
+F.Intrinsic.Control.EndIf
+Program.Sub.RowCellClick.End
+
+Program.Sub.CloseF_WO.Start
+Gui.F_WO..Visible(False)
+Gui.F_Order..Enabled(True)
+F.Data.DataView.Close("dtSOWO","dvJob")
+Gui.F_Order..Visible(False)
+Gui.F_Order..Visible(True)
+Program.Sub.CloseF_WO.End
+
+Program.Sub.RowClickF_WO.Start
+V.Local.sJob.Declare
+V.Local.sParam.Declare
+V.Local.sSuffix.Declare
+
+Gui.F_WO.GsGCJob.GetCellValue("gvJob",0,V.Args.RowIndex,V.Local.sJob)
+Gui.F_WO.GsGCJob.GetCellValue("gvJob",1,V.Args.RowIndex,V.Local.sSuffix)
+Gui.F_WO..Visible(False)
+Gui.F_Order..Enabled(True)
+f.Intrinsic.Control.If(v.Screen.F_Order!optEdit.Value,=,True)
+	F.Intrinsic.String.Build("{0}!*!{1}!*!O",V.Local.sJob.Trim,V.Local.sSuffix.Trim,V.Local.sParam)
+	F.Global.General.CallWrapperSync(2009,V.Local.sParam)
+F.Intrinsic.Control.ElseIf(V.Screen.F_Order!optView.Value,=,True)
+	F.Intrinsic.String.Build("7!*!{0}!*!{1}!*!A",V.Local.sJob.Trim,V.Local.sSuffix.Trim,V.Local.sParam)
+	F.Global.General.CallWrapperSync(450000,V.Local.sParam)
+F.Intrinsic.Control.EndIf
+F.Data.DataView.Close("dtSOWO","dvJob")
+Gui.F_Order..Visible(False)
+Gui.F_Order..Visible(True)
+Program.Sub.RowClickF_WO.End
+
+Program.Sub.RefreshScreen.Start
+V.Local.i1.Declare
+Gui.F_Order..Visible(False)
+Gui.F_Order.txtSOShip.Text("")
+F.Intrinsic.UI.InvokeWaitDialog("Refreshing grid","Apex Master Dashboard [4133]")
+F.Intrinsic.Control.For(V.Local.i1,V.DataTable.dtDash.RowCount--,0,-1)
+	F.Data.DataTable.DeleteRow("dtDash",V.Local.i1)
+F.Intrinsic.Control.Next(V.Local.i1)
+F.Intrinsic.Control.CallSub(loaddatatables,"iRefresh",1)
+F.Intrinsic.Control.CallSub(generatedashboarddata)
+F.Data.DataView.SetSort("dtDash","dvDash","Ship_Date ASC, Order ASC, Line ASC")
+F.Intrinsic.UI.CloseWaitDialog
+Gui.F_Order..Visible(True)
+Program.Sub.RefreshScreen.End
+
+Program.Sub.SortByOrder.Start
+F.Data.DataView.SetSort("dtDash","dvDash","Order ASC, Line ASC")
+Program.Sub.SortByOrder.End
+
+Program.Sub.CellValueChanged.Start
+V.Local.sComment.Declare
+V.Local.sLine.Declare
+V.Local.sOrder.Declare
+V.Local.sSQL.Declare
+
+Gui.F_Order.GsGCOrder.GetCellValue("gvDash",0,V.Args.RowIndex,V.Local.sOrder)
+Gui.F_Order.GsGCOrder.GetCellValue("gvDash",1,V.Args.RowIndex,V.Local.sLine)
+'Notes
+V.Local.sComment.Set(V.Args.Value)
+F.Intrinsic.Control.If(V.Args.Column,=,"Notes")
+	F.Intrinsic.String.Build("select * from ina_oe_dash_comment where ORDER_NO = '{0}' and RECORD_NO = '{1}' and date_order = '{2}'",V.Local.sOrder.Trim,V.Local.sLine.Trim,V.DataTable.dtDash(V.Args.RowIndex).Order_Date!FieldValPervasiveDate,V.Local.sSQL)
+	F.ODBC.Connection!conx.OpenLocalRecordsetRW("rst",V.Local.sSQL)
+	F.Intrinsic.Control.If(V.ODBC.conx!rst.EOF,=,True)
+		F.ODBC.conx!rst.AddNew
+		F.ODBC.conx!rst.Set!ORDER_NO(V.Local.sOrder.Trim)
+		F.ODBC.conx!rst.Set!RECORD_NO(V.Local.sLine.Trim)
+		F.ODBC.conx!rst.Set!DATE_ORDER(V.DataTable.dtDash(V.Args.RowIndex).Order_Date!FieldVal)
+	F.Intrinsic.Control.EndIf
+	F.ODBC.conx!rst.Set!COMMENT(V.Local.sComment.PSQLFriendly)
+	F.ODBC.conx!rst.Update
+	F.ODBC.conx!rst.Close
+F.Intrinsic.Control.ElseIf(V.Args.Column,=,"User5")
+	F.Intrinsic.String.Build("UPDATE order_lines SET user_5 = '{2}' where ORDER_NO = '{0}' and RECORD_NO = '{1}' and record_type = 'L'",V.Local.sOrder.Trim,V.Local.sLine.Trim,V.Local.sComment.PSQLFriendly,V.Local.sSQL)
+	F.ODBC.Connection!conx.Execute(V.Local.sSQL)
+F.Intrinsic.Control.EndIf
+Program.Sub.CellValueChanged.End
+
+Program.Sub.ExportGrid.Start
+V.Local.sFileExport.Declare
+V.Local.bExcel.Declare
+V.Local.bFileLocked.Declare
+V.Local.sFilePath.Declare
+V.Local.sMsg.Declare
+
+F.Automation.MSExcel.CheckPresence(V.Local.bExcel)
+
+'Display the Save Dialog
+F.Intrinsic.Control.If(V.Local.bExcel,=,True)
+	F.Intrinsic.UI.ShowSaveFileDialog("","*.xlsx|",V.Local.sFilePath)
+F.Intrinsic.Control.Else
+	F.Intrinsic.UI.ShowSaveFileDialog("","*.csv|",V.Local.sFilePath)
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.If(V.Local.sFilePath,<>,"***CANCEL***")
+'	F.Intrinsic.String.Format(V.Ambient.Date,"YYYYMMDD",V.Local.sMsg)
+	V.Local.sFileExport.Set(V.Local.sFilePath)
+'	F.Intrinsic.String.Build("{0}{1}\Desktop\Master_Dashboard_{2}",V.System.HomeDrive,V.System.HomePath,V.Local.sMsg.Trim,V.Local.sFileExport)
+	F.Intrinsic.Control.If(V.Local.bExcel,=,True)
+		F.Intrinsic.String.Concat(V.Local.sFileExport,".xlsx",V.Local.sFileExport)
+		Gui.F_Order.GsGCOrder.Export(V.Local.sFileExport,"xlsx")
+	F.Intrinsic.Control.Else
+		F.Intrinsic.String.Concat(V.Local.sFileExport,".csv",V.Local.sFileExport)
+		Gui.F_Order.GsGCOrder.Export(V.Local.sFileExport,"csv")
+	F.Intrinsic.Control.EndIf
+	F.Intrinsic.String.Concat("Grid has been exported to ",V.Local.sFileExport,V.Local.sMsg)
+	F.Intrinsic.UI.Msgbox(V.Local.sMsg)
+	F.Intrinsic.Task.ShellExec(0,"",V.Local.sFileExport,"","",1)
+F.Intrinsic.Control.EndIf
+Program.Sub.ExportGrid.End
+
+Program.Sub.Resize.Start
+V.Local.fWidth.Declare
+V.Local.idX.Declare
+V.Local.idY.Declare
+V.Local.iNewHeight.Declare
+V.Local.iNewWidth.Declare
+V.Local.iX.Declare
+V.Local.iY.Declare
+
+'Limit maximum screen width and height to 15,000 and 7,500
+F.Intrinsic.Control.If(V.Screen.F_Order.Width,<,15000)
+	Gui.F_Order..Size(15000,V.Screen.F_Order.Height)
+F.Intrinsic.Control.EndIf
+F.Intrinsic.Control.If(V.Screen.F_Order.Height,<,7500)
+	Gui.F_Order..Size(V.Screen.F_Order.Width,7500)
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.Math.Sub(V.Screen.F_Order.Width,V.Global.iF_OrderWidth,V.Local.idX)
+'GsGCOrder resizing
+F.Intrinsic.Math.Sub(V.Screen.F_Order.Width,V.Screen.F_Order!GsGCOrder.Left,V.Global.iGridDX,V.Local.iNewWidth)
+F.Intrinsic.Math.Sub(V.Screen.F_Order.Height,V.Screen.F_Order!GsGCOrder.Top,V.Global.iGridDY,V.Local.iNewHeight)
+Gui.F_Order.GsGCOrder.Size(V.Local.iNewWidth,V.Local.iNewHeight)
+'GSSLogo position
+F.Intrinsic.Math.Sub(V.Screen.F_Order.Width,V.Screen.F_Order!picGSSLogo.Width,V.Local.iX)
+F.Intrinsic.Math.Div(V.Local.iX,2,V.Local.iX)
+Gui.F_Order.picGSSLogo.CurrentX(V.Local.iX)
+'Label and textbox positions
+F.Intrinsic.Math.Add(V.Screen.F_Order!lbl1.Left,V.Local.idX,V.Local.iX)
+Gui.F_Order.lbl1.CurrentX(V.Local.iX)
+Gui.F_Order.txt1.CurrentX(V.Local.iX)
+Gui.F_Order.lblSOShip.CurrentX(V.Local.iX)
+Gui.F_Order.txtSOShip.CurrentX(V.Local.iX)
+'Frame position
+F.Intrinsic.Math.Sub(V.Screen.F_Order.Width,V.Screen.F_Order!frameMode.Width,V.Global.iGridDX,V.Local.iX)
+Gui.F_Order.frameMode.CurrentX(V.Local.iX)
+
+V.Global.iF_OrderHeight.Set(V.Screen.F_Order.Height)
+V.Global.iF_OrderWidth.Set(V.Screen.F_Order.Width)
+Program.Sub.Resize.End
+
+Program.Sub.CheckShipment.Start
+V.Local.iDiff.Declare
+V.Local.sSQL.Declare
+V.Local.sToday.Declare
+
+F.Intrinsic.Control.If(V.DataTable.dtShipped.Exists,=,True)
+	F.Data.DataTable.Close("dtShipped")
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.String.Format(V.Ambient.Date,"YYYY-MM-DD",V.Local.sToday)
+F.Intrinsic.String.Build("select order_suffix, time_last_chg from v_shipment_header where order_no = '{0}' and date_last_chg = '{1}' order by time_last_chg desc",V.Args.sSO.Trim,V.Local.sToday.Trim,V.Local.sSQL)
+F.ODBC.Connection!conx.OpenLocalRecordsetRO("rst",V.Local.sSQL)
+F.Intrinsic.Control.If(V.ODBC.conx!rst.EOF,=,False)
+	F.Intrinsic.Date.DateDiff("N",V.ODBC.conx!rst.FieldVal!time_last_chg,V.Ambient.Time,V.Local.iDiff)
+	F.Intrinsic.Control.If(V.Local.iDiff,<,20)
+		F.Intrinsic.String.Build("select order_rec as Line, qty_shipped as Qty from v_shipment_lines where order_no = '{0}' and order_suffix = '{1}' order by order_rec",V.Args.sSO.Trim,V.ODBC.conx!rst.FieldValTrim!order_suffix,V.Local.sSQL)
+		F.Data.DataTable.CreateFromSQL("dtShipped","Conx",V.Local.sSQL,True)
+	F.Intrinsic.Control.EndIf
+F.Intrinsic.Control.EndIf
+F.ODBC.conx!rst.Close
+Program.Sub.CheckShipment.End
+
+Program.Sub.txtSOShip_Entered.Start
+V.Local.sFilter.Declare
+V.Local.sRet.Declare
+V.Local.sSO.Declare
+
+V.Local.sSO.Set(V.Screen.F_Order!txtSOShip.Text)
+F.Intrinsic.Control.If(V.Local.sSO.Trim,<>,"")
+	F.Intrinsic.String.LPad(V.Local.sSO,"0",7,V.Local.sSO)
+'	F.Intrinsic.String.Build("Order = '{0}'",V.Local.sSO.Trim,V.Local.sFilter)
+'	F.Data.DataTable.Select("dtDash",V.Local.sFilter,V.Local.sRet)
+'	F.Intrinsic.Control.If(V.Local.sRet,<>,"***NORETURN***")
+		F.Global.General.CallWrapperSync(4010,v.Local.sSO.Trim)
+		F.Intrinsic.Control.CallSub(checkshipment,"sSO",V.Local.sSO.Trim)
+		F.Intrinsic.Control.If(V.DataTable.dtShipped.Exists,=,True)
+			Gui.F_Order.txtSOShip.Enabled(False)
+			Gui.F_Order.txtSOShip.Text("")
+			Gui.F_Order.frameMode.SetFocus
+			Gui.F_Order.txtSOShip.Enabled(True)
+			F.Intrinsic.Control.CallSub(removeorder,"sSO",V.Local.sSO.Trim)
+		F.Intrinsic.Control.EndIf
+'	F.Intrinsic.Control.Else
+'		F.Intrinsic.UI.Msgbox("The entered sales order number is not found","Apex Master Dashboard [4133]")
+'	F.Intrinsic.Control.EndIf
+F.Intrinsic.Control.EndIf
+Program.Sub.txtSOShip_Entered.End
+
+Program.Sub.ModeSelect.Start
+F.Intrinsic.Control.If(V.Screen.F_Order!optShip.Value,=,True)
+	Gui.F_Order.lblSOShip.Visible(True)
+	Gui.F_Order.txtSOShip.Visible(True)
+F.Intrinsic.Control.Else
+	Gui.F_Order.lblSOShip.Visible(False)
+	Gui.F_Order.txtSOShip.Visible(False)
+F.Intrinsic.Control.EndIf
+Program.Sub.ModeSelect.End
+
+Program.Sub.RemoveOrder.Start
+V.Local.i1.Declare
+V.Local.iQty.Declare
+V.Local.sFilter.Declare
+V.Local.sRet.Declare
+
+F.Intrinsic.Control.For(V.Local.i1,0,V.DataTable.dtShipped.RowCount--,1)
+	F.Intrinsic.String.Build("Order = '{0}' and Line = '{1}'",V.Args.sSO.Trim,V.DataTable.dtShipped(V.Local.i1).Line!FieldValTrim,V.Local.sFilter)
+	F.Data.DataTable.Select("dtDash",V.Local.sFilter,V.Local.sRet)
+	F.Intrinsic.Control.If(V.Local.sRet,<>,"***NORETURN***")
+		F.Intrinsic.Control.If(V.DataTable.dtDash(V.Local.sRet).Qty_Order!FieldValLong,>,V.DataTable.dtShipped(V.Local.i1).Qty!FieldValLong)
+			F.Intrinsic.Math.Sub(V.DataTable.dtDash(V.Local.sRet).Qty_Order!FieldValLong,V.DataTable.dtShipped(V.Local.i1).Qty!FieldValLong,V.Local.iQty)
+			F.Data.DataTable.SetValue("dtDash",V.Local.sRet,"Qty_Order",V.Local.iQty)
+		F.Intrinsic.Control.Else
+			F.Data.DataTable.DeleteRow("dtDash",V.Local.sRet)
+		F.Intrinsic.Control.EndIf
+	F.Intrinsic.Control.EndIf
+F.Intrinsic.Control.Next(V.Local.i1)
+
+F.Data.Dictionary.CreateFromDatatable("SO","dtDash","Order","Order")
+Gui.F_Order.txtSOShip.ClearAutoCompleteItems
+Gui.F_Order.txtSOShip.AddAutoCompleteItem("SO","Dictionary")
+F.Data.Dictionary.Close("SO")
+Program.Sub.RemoveOrder.End
+
+Program.Sub.Comments.Start
+${$0$}$Apex Master Order Dashboard$}$MHERTANTO$}$20/6/2017 10:31:47 PM$}$False
+${$3$}$0$}$$}$0$}$-1$}$$}$12:00:00 AM$}$This is a custom dashboard created for Apex Instruments which is based on open order dashboard.
+Program.Sub.Comments.End
